@@ -23,5 +23,12 @@ pipeline {
                 sh 'go build'
             }
         }
+
+         stage('Run') {
+            steps {
+                echo 'Run application'
+                sh './main'
+            }
+        }
     }
 }
