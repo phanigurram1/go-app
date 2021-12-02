@@ -11,9 +11,9 @@ pipeline {
     stages {        
         stage('Pre Test') {
             steps {
-                echo 'Installing dependencies'
+                echo 'check go version'
                 sh 'go version'
-                sh 'go get -u golang.org/x/lint/golint'
+                //sh 'go get -u golang.org/x/lint/golint'
             }
         }
         
