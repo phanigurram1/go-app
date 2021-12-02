@@ -1,27 +1,24 @@
-#!/bin/bash
-## We specify the base image we need for our
-## go application
-FROM golang:1.12.0-alpine3.9
-## We create an /app directory within our
-## image that will hold our application source
-## files
-RUN mkdir /app
+FROM golang:1.12-alpine
 
-## We copy everything in the root directory
-## into our /app directory
-ADD . /app
-ADD main /app
+RUN apk add --no-cache git
 
-## We specify that we now wish to execute 
-## any further commands inside our /app
-## directory
-WORKDIR /app
+# Set the Current Working Directory inside the container
+WORKDIR /app/go-sample-app
 
-## we run go build to compile the binary
-## executable of our Go program
-##RUN go build -o main .
-## Our start command which kicks off
-## our newly created binary executable
-##CMD ["/app/main"]
+# We want to populate the module cache based on the go.{mod,sum} files.
+COPY go.mod .
+COPY go.sum .
 
-ENTRYPOINT ["./main"]
+RUN go mod download
+
+COPY . .
+
+# Build the Go app
+RUN go build -o ./out/go-sample-app .
+
+
+# This container exposes port 8080 to the outside world
+EXPOSE 8080
+
+# Run the binary program produced by `go install`
+CMD ["./out/go-sample-app"]

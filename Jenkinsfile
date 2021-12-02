@@ -24,10 +24,10 @@ pipeline {
             }
         }
 
-         stage('Run') {
+         stage('Build docker image') {
             steps {
-                echo 'Run application'
-                sh './main'
+                echo 'create a docker image'
+                docker build -t my-go-app .      
             }
         }
     }
